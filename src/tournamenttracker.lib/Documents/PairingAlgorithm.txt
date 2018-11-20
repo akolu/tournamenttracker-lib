@@ -1,0 +1,32 @@
+﻿Pairing logic explained:
+================================================================================================
+
+If the players have played against each other in the past, a new opponent is found if possible. 
+The algorithm pairs the players starting from the highest score, so that the top pairings should
+be as evenly matched as possible. If it is possible to find unique pairings for each player but
+the only unpaired players have already played against each other, the algorithm backtracks the
+last successful pairing, marks it unallowed (in terms of uniqueness) and tries again, until all
+players have been paired.
+
+Consider the following example (players' opponent history is displayed in brackets):
+
+name    history       score
+---------------------------
+P1      (P2, P4)        30
+P2      (P1, P6)        25
+P4      (P3, P1)        21
+P3      (P4, P5)        20
+P6      (P5, P2)        10
+P5      (P6, P3)        10
+ 
+Pairing:
+------------------------------------------------------------------------------------------------
+P1  vs  P3		OK -> For P1, the next player from the top of the list he has not played is P3.
+P2  vs  P4		OK -> For P2 the next unpaired player is P4, which seems to be ok.
+P6  vs  P5		FAIL -> 6 and 5 already played, therefore P2 vs P4 can't be an allowed pairing.
+
+--> add P2 vs P4 to the list of unallowed pairings and try again
+
+P1  vs  P3		OK
+P2  vs  P6		OK
+P4  vs  P5		OK
